@@ -1,26 +1,22 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import AddIssue from './components/AddIssue';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <AddIssue></AddIssue>
+      {/* 
+      so like what we need is a table of issues
+      and then like a component-view (?) of issues
+      and also umm a sidebar and a top navbar thing
+      how are we creating new issues? let's make that the 
+      number one thing to work on. 
+      */}
     </div>
-  );
+  )
 }
 
 export default App;
