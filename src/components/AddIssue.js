@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components';
-
+import axios from 'axios';
+import { Button } from '@material-ui/core';
 
 
 const Wrapper = styled.section`
@@ -9,6 +10,9 @@ const Wrapper = styled.section`
   border-style: solid;
   height: 25%;
   width: 25%;
+  float: right;
+  
+
 `;
 
 
@@ -22,14 +26,15 @@ export class AddIssue extends Component {
              id: '',
              assigned: '',
              status: '',
-             severity: '',
-             description: ''
+             severity: 'Severe',
+             description: '',
+             posts: []
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
 
     handleChange = event => {
         this.setState({name: event.target.value});
@@ -44,19 +49,60 @@ export class AddIssue extends Component {
     handleDescriptionChange = event =>{
         this.setState({description: event.target.value});
     }
-    
-    handleSubmit(event) {
-        this.setState({id: 123456789});
-        this.setState({status: 'open'});
-        alert('A name was submitted: ' + this.state.name);
-        event.preventDefault();
+
+    clearInput = () => {
+        this.setState({
+            name: '',
+            id: 1,
+            assigned: Date(),
+            status: true,
+            severity: 'Severe',
+            description: ''
+        })
     }
+
+    
+
+
+    displayIssues = (posts) => {
+        return posts.map()
+        
+    }
+
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+
+        const payload = {
+            name: this.state.name,
+            id: 1,
+            assigned: Date(),
+            status: true,
+            severity: this.state.severity,
+            description: this.state.description
+        };
+
+        axios({
+            url: '/api/save',
+            method: 'POST',
+            data: payload
+        })
+            .then(() => {
+                console.log('data has been sent')
+                this.clearInput()
+            })
+            .catch(() => {
+                console.log('data didnt send :(')
+            })
+    }
+    
+    
 
     render() {
         return (
             <div>
             <Wrapper>
-            <form onSubmit={this.handleSubmit}>
+            <form>
                 <label>
                 Name:
                 <input type="text" value={this.state.name} onChange={this.handleChange} />
@@ -74,9 +120,9 @@ export class AddIssue extends Component {
                 <div>
                  <label>Severity</label>
                  <select value={this.state.severity} onChange={this.handleSeverityChange}>
-                    <option>Severe</option>
-                    <option>Moderate</option>
-                    <option>Okay</option>
+                    <option value="Severe">Severe</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Okay">Okay</option>
                  </select>
                 </div>
 
@@ -84,10 +130,15 @@ export class AddIssue extends Component {
                     <label>Description</label>
                     <textarea value={this.state.description} onChange={this.handleDescriptionChange}></textarea>
                 </div>
-
-                <input type="submit" value="Submit" />
+                <Button variant="contained" color="primary" disableElevation onClick={this.handleSubmit}>Submit</Button>     
             </form>
             </Wrapper>
+            <div>
+
+            </div>
+
+           
+
             </div>
         )
     }

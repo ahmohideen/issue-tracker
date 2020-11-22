@@ -4,25 +4,32 @@ const morgan = require('morgan');
 const path = require('path');
 
 
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+const MONGO_URL = 'mongodb+srv://admin:shiroyuki@cluster0.6gqfx.mongodb.net/issue-tracker?retryWrites=true&w=majority';
+
+const routes = require('./routes/api');
+
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+mongoose.connection.on('connected', () => {
+    console.log('mongoose is connected!')
+})
+
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: false
+}));
+
+
+
+
+
 app.use(morgan('tiny')); //this is an http request logger
-
-app.get('/api', (req, res) =>{
-    const data = {
-        name: 'hana',
-        age: 19
-    };
-    res.json(data)
-});
-
-app.get('/api/name', (req, res) =>{
-    const data = {
-        name: 'layla',
-        age: 19
-    };
-    res.json(data)
-});
+app.use('/', routes)
 
 app.listen(PORT, console.log(`Server is staring at ${PORT}`));
